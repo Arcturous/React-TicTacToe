@@ -1,15 +1,21 @@
 import { useState } from "react";
-import GameButton from "../Buttons/GameButton";
+import { GameButton } from "../";
+import { IsWin } from "../../GameLogic";
+import React from "react";
 
-function GameBoard() {
+export function GameBoard({ handleWin }): React.JSX.Element {
     const [squares, setSquares] = useState(Array(9).fill(null));
-    let [player, setPlayer] = useState(true);
+    let [player, setPlayer] = useState(0);
 
-    function handleClick(i, player) {
+    function handleClick(i: number, player: number) {
         const nextSquares = squares.slice();
-        nextSquares[i] = player ? "X" : "O";
-        setPlayer(!player);
+        nextSquares[i] = player === 0 ? "X" : "O";
+        setPlayer(player === 0 ? 1 : 0);
         setSquares(nextSquares);
+
+        if (IsWin(squares, 3, player as 1 | 0)) {
+            handleWin();
+        }
     }
 
     return <>
@@ -30,5 +36,3 @@ function GameBoard() {
         </div>
     </>
 }
-
-export default GameBoard;

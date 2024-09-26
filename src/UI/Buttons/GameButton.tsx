@@ -1,7 +1,6 @@
 import React from "react";
 
-function GameButton({ value, onButtonClick }) {
+export function GameButton({ value, onButtonClick }): React.JSX.Element {
     return <button disabled={!!value} className="board-button" onClick={onButtonClick}>{value ?? ""}</button>;
 }
 
-export default GameButton;
