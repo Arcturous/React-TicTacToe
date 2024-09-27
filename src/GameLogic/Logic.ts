@@ -1,3 +1,4 @@
+import { ePlayerSymbol } from "../Enums/ePlayerSymbol";
 import { Move } from "./Move";
 
 const WIN_SCORE = 10;
@@ -7,14 +8,14 @@ const DRAW_SCORE = 0;
 
 const checkedMoves = new Map<string, Move>();
 
-let currentPlayerSymbol: 1 | 0;
-let currentOpponentSymbol: 1 | 0;
+let currentPlayerSymbol: ePlayerSymbol;
+let currentOpponentSymbol: ePlayerSymbol;
 
-export function CalculateBestMove(grid: number[], playerSymbol: 1 | 0) {
+export function CalculateBestMove(grid: number[], playerSymbol: ePlayerSymbol) {
     checkedMoves.clear();
 
     currentPlayerSymbol = playerSymbol;
-    currentOpponentSymbol = (1 - playerSymbol) as 0 | 1;   // this only applies because we know theres only 2 symbols "X" and "O", need to change if we want to add more symbols in the future
+    currentOpponentSymbol = (1 - playerSymbol) as ePlayerSymbol;   // this only applies because we know theres only 2 symbols "X" and "O", need to change if we want to add more symbols in the future
 
     if (grid.every(element => element === -1))   // if the grid is empty
     {
@@ -39,7 +40,7 @@ function GetEmptyIndices(grid: number[]): number[] {
     return emptyindices;
 }
 
-function MiniMax(newGrid: number[], gridDimension: number, playerSymbol: 1 | 0): Move {
+function MiniMax(newGrid: number[], gridDimension: number, playerSymbol: ePlayerSymbol): Move {
     if (IsWin(newGrid, gridDimension, currentOpponentSymbol)) // other player won
     {
         return new Move(-1, LOSE_SCORE);
@@ -73,7 +74,7 @@ function MiniMax(newGrid: number[], gridDimension: number, playerSymbol: 1 | 0):
         }
         else    // key doesn't exist
         {
-            result = MiniMax(newGrid, gridDimension, (1 - playerSymbol) as (0 | 1));
+            result = MiniMax(newGrid, gridDimension, (1 - playerSymbol) as (ePlayerSymbol));
             checkedMoves.set(newGrid.join(", ") + `, ${(1 - playerSymbol)}`, result);
         }
 
@@ -113,7 +114,7 @@ function MiniMax(newGrid: number[], gridDimension: number, playerSymbol: 1 | 0):
     return bestMove;
 }
 
-export function IsWin(grid: number[], gridDimension: number, playerSymbol: 1 | 0) {
+export function IsWin(grid: number[], gridDimension: number, playerSymbol: ePlayerSymbol) {
     let matchesNumberHorizontal = 0;
     let matchesNumberVertical = 0;
     let matchesNumberDiagonal = 0;

@@ -2,19 +2,27 @@ import { useState } from "react";
 import { GameButton } from "../";
 import { IsWin } from "../../GameLogic";
 import React from "react";
+import { ePlayerSymbol } from "../../Enums/ePlayerSymbol";
+import { Grid } from "../../GameLogic/Grid";
 
 export function GameBoard({ handleWin }): React.JSX.Element {
     const [squares, setSquares] = useState(Array(9).fill(null));
-    let [player, setPlayer] = useState(0);
+    const [player, setPlayer] = useState(ePlayerSymbol.X);
+
+    const grid = new Grid(3);
+
 
     function handleClick(i: number, player: number) {
         const nextSquares = squares.slice();
-        nextSquares[i] = player === 0 ? "X" : "O";
-        setPlayer(player === 0 ? 1 : 0);
+        nextSquares[i] = player === ePlayerSymbol.X ? "X" : "O";
+
+        grid.MarkGrid(i, player);
+
+        setPlayer(player === ePlayerSymbol.X ? ePlayerSymbol.O : ePlayerSymbol.X);
         setSquares(nextSquares);
 
-        if (IsWin(squares, 3, player as 1 | 0)) {
-            handleWin();
+        if (IsWin(squares, 3, player)) {
+            handleWin(player);
         }
     }
 
